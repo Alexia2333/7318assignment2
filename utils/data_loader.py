@@ -8,9 +8,14 @@ def prepare_data(config):
     Prepare train, validation and test data loaders
     """
     # Define transforms
-    transform = transforms.Compose([
+    transform_train = transforms.Compose([
+        transforms.RandomCrop(32, padding=4),      
+        transforms.RandomHorizontalFlip(),         
         transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        transforms.Normalize(
+            mean=[0.4914, 0.4822, 0.4465],  
+            std=[0.2023, 0.1994, 0.2010]
+        )
     ])
     
     # Load full training dataset
@@ -18,7 +23,7 @@ def prepare_data(config):
         root=config['paths']['data_dir'],
         train=True,
         download=True,
-        transform=transform
+        transform=transforms
     )
     
     # Calculate lengths for train-val split
@@ -50,7 +55,7 @@ def prepare_data(config):
         root=config['paths']['data_dir'],
         train=False,
         download=True,
-        transform=transform
+        transform=transforms
     )
     
     testloader = DataLoader(
