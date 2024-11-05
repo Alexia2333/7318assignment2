@@ -15,7 +15,7 @@ CONFIG = {
     # dateset
     'data_config': {
         'batch_size': BATCH_SIZE,
-        'num_workers': 4,
+        'num_workers': 0,
         'pin_memory': PIN_MEMORY,  
         'train_val_split': 0.9,
     },

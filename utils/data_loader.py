@@ -8,9 +8,9 @@ def prepare_data(config):
     Prepare train, validation and test data loaders
     """
     # Define transforms
-    transform_train = transforms.Compose([
-        transforms.RandomCrop(32, padding=4),      
-        transforms.RandomHorizontalFlip(),         
+    transform_train = transforms.Compose([             
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomCrop(32, padding=4),        
         transforms.ToTensor(),
         transforms.Normalize(
             mean=[0.4914, 0.4822, 0.4465],  
@@ -18,12 +18,20 @@ def prepare_data(config):
         )
     ])
     
-    # Load full training dataset
+    transform_test = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize(
+            mean=[0.4914, 0.4822, 0.4465],  
+            std=[0.2023, 0.1994, 0.2010]
+        )
+    ])
+
+    # Load full training dataset with training transforms
     trainval = torchvision.datasets.CIFAR10(
         root=config['paths']['data_dir'],
         train=True,
         download=True,
-        transform=transforms
+        transform=transform_train
     )
     
     # Calculate lengths for train-val split
@@ -50,12 +58,12 @@ def prepare_data(config):
         pin_memory=config['data_config']['pin_memory']
     )
     
-    # Load test set
+    # Load test set with test transforms
     testset = torchvision.datasets.CIFAR10(
         root=config['paths']['data_dir'],
         train=False,
         download=True,
-        transform=transforms
+        transform=transform_test
     )
     
     testloader = DataLoader(
