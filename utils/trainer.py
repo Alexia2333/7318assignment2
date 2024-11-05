@@ -194,14 +194,23 @@ class Trainer:
         num_epochs = self.config['train_config']['epochs']
 
         for epoch in range(num_epochs):
+
+            print(f'\nEpoch: {epoch+1}/{num_epochs}')
+
             train_loss, train_acc, epoch_time = self.train_epoch(train_loader)
             train_times.append(epoch_time)
             
             val_loss, val_acc = self.validate(val_loader)
             
-            self.scheduler.step()
-            current_lr = self.scheduler.get_last_lr()[0]
+            if self.scheduler:
+                self.scheduler.step()
+                current_lr = self.scheduler.get_last_lr()[0]
+                print(f'Learning Rate: {current_lr:.6f}')
             
+            print(f'Train Loss: {train_loss:.3f} | Train Acc: {train_acc:.2f}%')
+            print(f'Val Loss: {val_loss:.3f} | Val Acc: {val_acc:.2f}%')
+            
+
             if val_acc > best_acc:
                 best_acc = val_acc
                 torch.save({
@@ -212,8 +221,6 @@ class Trainer:
                     'best_acc': best_acc,
                 }, 'best_model.pth')
             
-            print(f'\nEpoch: {epoch+1}/{num_epochs}')
-            print(f'Train Loss: {train_loss:.3f} | Train Acc: {train_acc:.2f}%')
-            print(f'Val Loss: {val_loss:.3f} | Val Acc: {val_acc:.2f}%')
+            
             
         return best_acc
