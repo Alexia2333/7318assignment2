@@ -29,7 +29,12 @@ def train_model_with_name(model_name, config, trainloader, valloader, testloader
         weight_decay=config['train_config']['weight_decay']
     )
     
-    trainer = Trainer(model, criterion, optimizer, device, config)
+    scheduler = optim.lr_scheduler.CosineAnnealingLR(
+        optimizer, 
+        T_max=config['train_config']['epochs']
+    )
+
+    trainer = Trainer(model, criterion, optimizer,scheduler ,device, config)
     
     # Train
     print(f"\nStarting {model_name} training...")
