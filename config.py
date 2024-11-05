@@ -4,7 +4,7 @@ import torch
 if torch.cuda.is_available():
     DEVICE = torch.device("cuda:0")
 
-    BATCH_SIZE = 128 
+    BATCH_SIZE = 256 
     PIN_MEMORY = True
 else:
     DEVICE = torch.device("cpu")
@@ -23,10 +23,10 @@ CONFIG = {
     # train
     'train_config': {
         'epochs': 100,
-        'learning_rate': 0.1,
-        'weight_decay': 5e-4,
+        'learning_rate': 0.001,
+        'weight_decay': 1e-4,
         'device': DEVICE,
-        'gradient_clip': 5.0,
+        'gradient_clip': 1.0,
         'scheduler': {
             'type': 'CosineAnnealingLR',    
             'T_max': 100,                    
