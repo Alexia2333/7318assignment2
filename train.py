@@ -43,7 +43,7 @@ def train_model_with_name(model_name, config, trainloader, valloader, testloader
     # Evaluate
     print(f"\nEvaluating {model_name} on test set...")
     test_loss, test_acc = trainer.evaluate(testloader)
-    print(f"{model_name} Test Loss: {test_loss:.4f} | Test Acc: {test_acc*100:.2f}%")
+    print(f"{model_name} Test Loss: {test_loss:.4f} | Test Acc: {test_acc:.2f}%")
     
     return test_loss, test_acc
 

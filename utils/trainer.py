@@ -165,7 +165,7 @@ class Trainer:
         return total_loss / len(train_loader), 100. * correct / total, epoch_time
 
     @torch.no_grad()
-    def validate(self, val_loader):
+    def evaluate(self, val_loader):
         self.model.eval()
         total_loss = 0
         correct = 0
@@ -188,6 +188,7 @@ class Trainer:
         
         return total_loss / len(val_loader), 100. * correct / total
 
+
     def train(self, train_loader, val_loader):
         best_acc = 0
         train_times = []
@@ -200,7 +201,7 @@ class Trainer:
             train_loss, train_acc, epoch_time = self.train_epoch(train_loader)
             train_times.append(epoch_time)
             
-            val_loss, val_acc = self.validate(val_loader)
+            val_loss, val_acc = self.evaluate(val_loader)
             
             if self.scheduler:
                 self.scheduler.step()
@@ -219,7 +220,9 @@ class Trainer:
                     'optimizer_state_dict': self.optimizer.state_dict(),
                     'scheduler_state_dict': self.scheduler.state_dict() if self.scheduler else None,
                     'best_acc': best_acc,
-                }, 'best_model.pth')
+                }, 'best_model.pth'
+                )
+                print("Saved new best model")
             
             
             
