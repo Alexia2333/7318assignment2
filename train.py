@@ -4,11 +4,15 @@ import torch.optim as optim
 from models import BasicCNN, ResNet18, VGG16, SimpleUNet
 from utils.data_loader import prepare_data
 from utils.trainer import Trainer
+from utils.logger import TrainingLogger, plot_models_comparison
 from config import CONFIG
+import os
 
 def train_model_with_name(model_name, config, trainloader, valloader, testloader):
     print(f"\n{'='*20} Training {model_name} {'='*20}")
     
+    os.makedirs('logs', exist_ok=True)
+    logger = TrainingLogger(model_name, config)
     # build models
     if model_name == "BasicCNN":
         model = BasicCNN(config)
@@ -34,7 +38,7 @@ def train_model_with_name(model_name, config, trainloader, valloader, testloader
         T_max=config['train_config']['epochs']
     )
 
-    trainer = Trainer(model, criterion, optimizer,scheduler ,device, config)
+    trainer = Trainer(model, criterion, optimizer,scheduler ,device, config, logger)
     
     # Train
     print(f"\nStarting {model_name} training...")
@@ -58,6 +62,9 @@ def main():
     print("\nPreparing data...")
     trainloader, valloader, testloader = prepare_data(CONFIG)
     
+
+
+
     # train
     results = {}
     models = ["BasicCNN", "ResNet18", "VGG16", "SimpleUNet"]
@@ -73,7 +80,11 @@ def main():
     print("Final Results Comparison:")
     print("="*50)
     for model_name, metrics in results.items():
-        print(f"{model_name:10s}: Test Acc = {metrics['acc']*100:.2f}%, Test Loss = {metrics['loss']:.4f}")
+        print(f"{model_name:10s}: Test Acc = {metrics['acc']:.2f}%, Test Loss = {metrics['loss']:.4f}")
+
 
 if __name__ == '__main__':
     main()
+    print("Generating comparison plots for all experiments...")
+    plot_models_comparison()
+    print("Comparison plots generated!")

@@ -1,0 +1,71 @@
+{
+    "train_loss": [
+        1.961304480379278,
+        1.7652836868708783
+    ],
+    "train_acc": [
+        31.4,
+        40.977777777777774
+    ],
+    "val_loss": [
+        1.801730316877365,
+        1.7286718785762787
+    ],
+    "val_acc": [
+        38.82,
+        41.78
+    ],
+    "learning_rates": [
+        0.0005,
+        0.0
+    ],
+    "epoch_times": [],
+    "model_name": "BasicCNN",
+    "config": {
+        "data_config": {
+            "batch_size": 256,
+            "num_workers": 0,
+            "pin_memory": true,
+            "train_val_split": 0.9
+        },
+        "train_config": {
+            "epochs": 2,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0001,
+            "device": "cuda:0",
+            "gradient_clip": 1.0,
+            "scheduler": {
+                "type": "CosineAnnealingLR",
+                "T_max": 25,
+                "eta_min": 0
+            },
+            "early_stopping": {
+                "patience": 20,
+                "min_delta": 0.001
+            }
+        },
+        "model_config": {
+            "num_classes": 10,
+            "basic_cnn": {
+                "conv1_out": 6,
+                "conv2_out": 16,
+                "fc1_out": 120,
+                "fc2_out": 84
+            },
+            "resnet18": {
+                "block_config": [
+                    2,
+                    2,
+                    2,
+                    2
+                ],
+                "init_channels": 64
+            }
+        },
+        "paths": {
+            "data_dir": "./data",
+            "save_dir": "./checkpoints",
+            "best_model_path": "best_model.pt"
+        }
+    }
+}

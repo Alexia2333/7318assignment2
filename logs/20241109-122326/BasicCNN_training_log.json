@@ -1,0 +1,86 @@
+{
+    "train_loss": [
+        1.9610636085271835,
+        1.755277844992551,
+        1.6881559870459817,
+        1.646408012644811,
+        1.619001759046858
+    ],
+    "train_acc": [
+        31.517777777777777,
+        41.42444444444445,
+        44.684444444444445,
+        46.61555555555555,
+        48.46888888888889
+    ],
+    "val_loss": [
+        1.7831638276576995,
+        1.7146825969219208,
+        1.6625012695789336,
+        1.6420042276382447,
+        1.6232329308986664
+    ],
+    "val_acc": [
+        40.0,
+        43.38,
+        45.86,
+        46.36,
+        46.96
+    ],
+    "learning_rates": [
+        0.0009045084971874737,
+        0.0006545084971874737,
+        0.00034549150281252633,
+        9.549150281252633e-05,
+        0.0
+    ],
+    "epoch_times": [],
+    "model_name": "BasicCNN",
+    "config": {
+        "data_config": {
+            "batch_size": 256,
+            "num_workers": 4,
+            "pin_memory": true,
+            "train_val_split": 0.9
+        },
+        "train_config": {
+            "epochs": 5,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0001,
+            "device": "cuda:0",
+            "gradient_clip": 1.0,
+            "scheduler": {
+                "type": "CosineAnnealingLR",
+                "T_max": 5,
+                "eta_min": 0
+            },
+            "early_stopping": {
+                "patience": 20,
+                "min_delta": 0.001
+            }
+        },
+        "model_config": {
+            "num_classes": 10,
+            "basic_cnn": {
+                "conv1_out": 6,
+                "conv2_out": 16,
+                "fc1_out": 120,
+                "fc2_out": 84
+            },
+            "resnet18": {
+                "block_config": [
+                    2,
+                    2,
+                    2,
+                    2
+                ],
+                "init_channels": 64
+            }
+        },
+        "paths": {
+            "data_dir": "./data",
+            "save_dir": "./checkpoints",
+            "best_model_path": "best_model.pt"
+        }
+    }
+}

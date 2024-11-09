@@ -99,20 +99,24 @@ import torch
 import torch.nn as nn
 from tqdm import tqdm
 import time
+from utils.logger import TrainingLogger
 
 class Trainer:
-    def __init__(self, model, criterion, optimizer, scheduler, device, config):
+    def __init__(self, model, criterion, optimizer, scheduler, device, config,logger):
         self.model = model
         self.criterion = criterion
         self.optimizer = optimizer
         self.scheduler = scheduler
         self.device = device
         self.config = config
+        self.logger = logger
         
         self.data_stream = torch.cuda.Stream()
 
         self.start_event = torch.cuda.Event(enable_timing=True)
         self.end_event = torch.cuda.Event(enable_timing=True)
+
+        self.device = torch.device(device) if isinstance(device, str) else device
 
     def train_epoch(self, train_loader):
         self.model.train()
@@ -208,8 +212,18 @@ class Trainer:
                 current_lr = self.scheduler.get_last_lr()[0]
                 print(f'Learning Rate: {current_lr:.6f}')
             
+            self.logger.log_epoch(
+                epoch=epoch,
+                train_loss=train_loss,
+                train_acc=train_acc,
+                val_loss=val_loss,
+                val_acc=val_acc,
+                lr=current_lr,
+            )
+
             print(f'Train Loss: {train_loss:.3f} | Train Acc: {train_acc:.2f}%')
             print(f'Val Loss: {val_loss:.3f} | Val Acc: {val_acc:.2f}%')
+            
             
 
             if val_acc > best_acc:
@@ -225,5 +239,5 @@ class Trainer:
                 print("Saved new best model")
             
             
-            
+        self.logger.plot_training_history()    
         return best_acc

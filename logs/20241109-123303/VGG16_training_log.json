@@ -1,0 +1,86 @@
+{
+    "train_loss": [
+        1.7415578751401468,
+        1.3619227822531352,
+        1.167031709443439,
+        1.0316069515591317,
+        0.953151581978256
+    ],
+    "train_acc": [
+        39.422222222222224,
+        61.41555555555556,
+        70.74888888888889,
+        77.36222222222223,
+        80.9
+    ],
+    "val_loss": [
+        1.5162334263324737,
+        1.4017310917377472,
+        1.413927388191223,
+        1.02488254904747,
+        0.9392835021018981
+    ],
+    "val_acc": [
+        51.34,
+        59.14,
+        60.7,
+        76.78,
+        80.38
+    ],
+    "learning_rates": [
+        0.0009045084971874737,
+        0.0006545084971874737,
+        0.00034549150281252633,
+        9.549150281252633e-05,
+        0.0
+    ],
+    "epoch_times": [],
+    "model_name": "VGG16",
+    "config": {
+        "data_config": {
+            "batch_size": 256,
+            "num_workers": 4,
+            "pin_memory": true,
+            "train_val_split": 0.9
+        },
+        "train_config": {
+            "epochs": 5,
+            "learning_rate": 0.001,
+            "weight_decay": 0.0001,
+            "device": "cuda:0",
+            "gradient_clip": 1.0,
+            "scheduler": {
+                "type": "CosineAnnealingLR",
+                "T_max": 5,
+                "eta_min": 0
+            },
+            "early_stopping": {
+                "patience": 20,
+                "min_delta": 0.001
+            }
+        },
+        "model_config": {
+            "num_classes": 10,
+            "basic_cnn": {
+                "conv1_out": 6,
+                "conv2_out": 16,
+                "fc1_out": 120,
+                "fc2_out": 84
+            },
+            "resnet18": {
+                "block_config": [
+                    2,
+                    2,
+                    2,
+                    2
+                ],
+                "init_channels": 64
+            }
+        },
+        "paths": {
+            "data_dir": "./data",
+            "save_dir": "./checkpoints",
+            "best_model_path": "best_model.pt"
+        }
+    }
+}
